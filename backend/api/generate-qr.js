@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const qr = require('qrcode');
 
-module.exports = async (req, res) => {
+const handler = async (req, res) => {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -58,3 +58,5 @@ module.exports = async (req, res) => {
         return res.status(500).json({ error: 'Failed to generate QR code' });
     }
 };
+
+module.exports = handler;

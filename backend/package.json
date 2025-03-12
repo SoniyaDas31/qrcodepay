@@ -1,24 +1,8 @@
 {
-  "name": "qrcodeapi",
+  "name": "qrcodepay-backend",
   "version": "1.0.0",
-  "description": "qrcode generator",
-  "main": "server.js",
-  "scripts": {
-    "test": "code generate",
-    "start": "node server.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/SoniyaDas31/qrcodepay.git"
-  },
-  "keywords": [
-    "qr",
-    "generator"
-  ],
-  "author": "das",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/SoniyaDas31/qrcodepay/issues"
-  },
-  "homepage": "https://github.com/SoniyaDas31/qrcodepay#readme"
+  "main": "api/generate-qr.js",
+  "dependencies": {
+    "qrcode": "^1.5.3"
+  }
 }
