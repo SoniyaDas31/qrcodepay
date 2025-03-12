@@ -2,12 +2,23 @@ const express = require('express');
 const cors = require('cors');
 const qr = require('qrcode');
 
-const app = express();
+module.exports = async (req, res) => {
+    // Enable CORS
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,POST');
+    res.setHeader('Access-Control-Allow-Headers', 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version');
 
-app.use(cors());
-app.use(express.json());
+    // Handle OPTIONS request
+    if (req.method === 'OPTIONS') {
+        return res.status(200).end();
+    }
 
-const generateQR = async (req, res) => {
+    // Only allow POST requests
+    if (req.method !== 'POST') {
+        return res.status(405).json({ error: 'Method not allowed' });
+    }
+
     try {
         const {
             payeeName,
@@ -47,19 +58,3 @@ const generateQR = async (req, res) => {
         return res.status(500).json({ error: 'Failed to generate QR code' });
     }
 };
-
-app.post('/api/generate-qr', generateQR);
-
-// Health check endpoint
-app.get('/api/health', (req, res) => {
-    res.json({ status: 'ok' });
-});
-
-if (process.env.NODE_ENV !== 'production') {
-    const PORT = process.env.PORT || 5000;
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-}
-
-module.exports = app;

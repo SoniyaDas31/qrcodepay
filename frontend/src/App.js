@@ -16,7 +16,13 @@ function App() {
     e.preventDefault();
     setError('');
     try {
-      const response = await fetch('http://localhost:5000/api/generate-qr', {
+      // Replace the fetch URL with your Vercel backend URL
+      const API_URL = process.env.NODE_ENV === 'production' 
+        ? 'https://backend-fsrqv7x27-soniyadas31s-projects.vercel.app/api/generate-qr'
+        : 'http://localhost:5000/api/generate-qr';
+      
+      // In your handleSubmit function:
+      const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
