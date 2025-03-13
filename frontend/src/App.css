@@ -60,6 +60,50 @@ input:focus, select:focus {
   border-color: #4CAF50;
 }
 
+.button-group {
+  display: flex;
+  gap: 10px;
+}
+
+.save-button {
+  background-color: #2196F3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  padding: 12px 20px;
+}
+
+@media (max-width: 768px) {
+  .button-group {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .save-button {
+    width: 100%;
+  }
+}
+
+.save-button:hover {
+  background-color: #1976D2;
+}
+
+.save-icon {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+button[type="submit"] {
+  flex: 1;
+}
+
 button {
   background-color: #4CAF50;
   color: white;
@@ -133,17 +177,45 @@ button:hover {
 }
 
 
-.modal-overlay {
+.loader-overlay {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.7);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 2000;
+}
+
+.loader-content {
+  background: white;
+  padding: 30px;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.loader {
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #4CAF50;
+  width: 40px;
+  height: 40px;
+  margin: 0 auto 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loader-content p {
+  color: #333;
+  margin: 0;
+  font-size: 16px;
 }
 
 .modal {

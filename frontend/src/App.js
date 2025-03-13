@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 import qrIcon from './assets/qr-icon.png';
 
@@ -13,10 +13,12 @@ function App() {
   const [qrCode, setQrCode] = useState('');
   const [error, setError] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    setIsLoading(true); // Start loading
     try {
       const API_URL = process.env.NODE_ENV === 'production' 
         ? 'https://qrcodepay.onrender.com/api/generate-qr'
@@ -36,10 +38,12 @@ function App() {
         return;
       }
       setQrCode(data.qrCode);
-      setShowModal(true); // Show modal when QR code is generated
+      setShowModal(true);
     } catch (error) {
       setError('Failed to generate QR code');
       console.error('Error:', error);
+    } finally {
+      setIsLoading(false); // Stop loading
     }
   };
 
@@ -48,6 +52,29 @@ function App() {
       ...formData,
       [e.target.name]: e.target.value
     });
+  };
+
+  // Load saved data when component mounts
+  useEffect(() => {
+    const savedData = localStorage.getItem('paymentInfo');
+    if (savedData) {
+      const { payeeName, paymentAddressType, paymentAddress } = JSON.parse(savedData);
+      setFormData(prev => ({
+        ...prev,
+        payeeName,
+        paymentAddressType,
+        paymentAddress
+      }));
+    }
+  }, []);
+
+  const handleSaveInfo = () => {
+    const dataToSave = {
+      payeeName: formData.payeeName,
+      paymentAddressType: formData.paymentAddressType,
+      paymentAddress: formData.paymentAddress
+    };
+    localStorage.setItem('paymentInfo', JSON.stringify(dataToSave));
   };
 
   return (
@@ -118,7 +145,22 @@ function App() {
             />
           </div>
 
-          <button type="submit">Generate QR Code</button>
+          <div className="button-group">
+            <button type="submit">Generate QR Code</button>
+            <button 
+              type="button" 
+              className="save-button" 
+              onClick={handleSaveInfo}
+              title="Save payment information"
+            >
+              <svg className="save-icon" viewBox="0 0 24 24">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+              Save Info
+            </button>
+          </div>
         </form>
 
         {error && <div className="error">{error}</div>}
@@ -140,6 +182,14 @@ function App() {
           </>
         )}
       </div>
+      {isLoading && (
+        <div className="loader-overlay">
+          <div className="loader-content">
+            <div className="loader"></div>
+            <p>QR code generation is in progress...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
