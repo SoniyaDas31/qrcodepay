@@ -11,17 +11,16 @@ function App() {
   });
   const [qrCode, setQrCode] = useState('');
   const [error, setError] = useState('');
+  const [showModal, setShowModal] = useState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
     try {
-      // Replace the fetch URL with your Vercel backend URL
       const API_URL = process.env.NODE_ENV === 'production' 
-        ? 'https://backend-fsrqv7x27-soniyadas31s-projects.vercel.app/api/generate-qr'
+        ? 'https://qrcodepay.onrender.com/api/generate-qr'
         : 'http://localhost:5000/api/generate-qr';
       
-      // In your handleSubmit function:
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
@@ -36,6 +35,7 @@ function App() {
         return;
       }
       setQrCode(data.qrCode);
+      setShowModal(true); // Show modal when QR code is generated
     } catch (error) {
       setError('Failed to generate QR code');
       console.error('Error:', error);
@@ -53,7 +53,7 @@ function App() {
     <div className="App">
       <h1>UPI QR Code Generator</h1>
       <div className="container">
-        <form onSubmit={handleSubmit}>
+        <form className="qr-form" onSubmit={handleSubmit}>
           <div className="form-group">
             <label>Payee/Merchant Name:</label>
             <input
@@ -118,16 +118,22 @@ function App() {
           <button type="submit">Generate QR Code</button>
         </form>
 
-        <div className="qr-result">
-          {error && <div className="error">{error}</div>}
-          {qrCode && (
-            <div className="qr-code">
-              <h2>Scan QR Code</h2>
-              <img src={qrCode} alt="UPI QR Code" />
-              <p>Scan this QR code using any UPI-enabled payment app</p>
+        {error && <div className="error">{error}</div>}
+        
+        {/* Modal */}
+        {showModal && qrCode && (
+          <>
+            <div className="modal-overlay" onClick={() => setShowModal(false)}></div>
+            <div className="modal">
+              <div className="modal-content">
+                <h2>Scan QR Code</h2>
+                <img src={qrCode} alt="UPI QR Code" />
+                <p>Scan this QR code using any UPI-enabled payment app</p>
+                <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
+              </div>
             </div>
-          )}
-        </div>
+          </>
+        )}
       </div>
     </div>
   );

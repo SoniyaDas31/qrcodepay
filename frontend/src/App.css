@@ -63,9 +63,29 @@ button:hover {
   background-color: #45a049;
 }
 
+/* Remove these styles */
 .qr-result {
   flex: 1;
   text-align: center;
+}
+
+/* Update media query */
+.qr-form {
+  width: 45%;
+  margin: 0 auto;
+  flex: none;
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .qr-form {
+    width: 85%;
+    margin: 0 auto;
+    flex: none;
+  }
 }
 
 .qr-code {
@@ -97,4 +117,85 @@ button:hover {
   .qr-result {
     margin-top: 30px;
   }
+}
+
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  z-index: 1001;
+  max-width: 90%;
+  width: 400px;
+}
+
+.modal-content {
+  text-align: center;
+  padding-bottom: 60px; /* Add space for the bottom button */
+}
+
+.close-button {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  color: white;
+  padding: 12px 40px;
+  width: auto;
+  transition: background-color 0.3s;
+}
+
+.close-button:hover {
+  background-color: #45a049;
+}
+
+.modal-content img {
+  max-width: 100%;
+  height: auto;
+  margin: 15px 0;
+}
+
+.close-button {
+  position: absolute;
+  right: 10px;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+}
+
+.close-button:hover {
+  color: #333;
+}
+
+.modal h2 {
+  margin-top: 10px;
+  color: #333;
+}
+
+.modal p {
+  color: #666;
+  margin-bottom: 10px;
 }
