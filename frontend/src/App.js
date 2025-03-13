@@ -127,8 +127,10 @@ function App() {
             <div className="modal">
               <div className="modal-content">
                 <h2>Scan QR Code</h2>
+                {formData.amount && <div className="amount-text">₹{formData.amount}</div>}
                 <img src={qrCode} alt="UPI QR Code" />
-                <p>Scan this QR code using any UPI-enabled payment app</p>
+                <p className="upi-id">{formData.paymentAddress}</p>
+                <p className="scan-text">Scan using any UPI payment apps</p>
                 <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
               </div>
             </div>

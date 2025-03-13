@@ -147,9 +147,28 @@ button:hover {
   width: 400px;
 }
 
+.amount-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin: 10px 0;
+}
+
+.upi-id {
+  font-size: 14px;
+  color: #666;
+  margin: 5px 0;
+}
+
+.scan-text {
+  font-size: 16px;
+  color: #4CAF50;
+  margin: 10px 0 20px 0;
+}
+
 .modal-content {
   text-align: center;
-  padding-bottom: 60px; /* Add space for the bottom button */
+  padding-bottom: 70px;
 }
 
 .close-button {
