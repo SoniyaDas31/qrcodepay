@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './App.css';
+import qrIcon from './assets/qr-icon.png';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -51,7 +52,10 @@ function App() {
 
   return (
     <div className="App">
-      <h1>UPI QR Code Generator</h1>
+      <div className="app-header">
+        {/* <img src={qrIcon} alt="Scan2Pay" className="app-logo" /> */}
+        <h1>Scan2Pay UPI</h1>
+      </div>
       <div className="container">
         <form className="qr-form" onSubmit={handleSubmit}>
           <div className="form-group">
