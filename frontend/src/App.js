@@ -74,7 +74,6 @@ function App() {
               onChange={handleChange}
             >
               <option value="UPI">UPI ID</option>
-              <option value="BANK">Bank Account</option>
               <option value="MOBILE">Mobile Number</option>
             </select>
           </div>
@@ -87,7 +86,7 @@ function App() {
               value={formData.paymentAddress}
               onChange={handleChange}
               required
-              placeholder="Enter UPI ID/Account/Mobile"
+              placeholder="Enter UPI ID / Mobile"
             />
           </div>
 
