@@ -78,7 +78,15 @@ function App() {
   };
 
   const handleShare = () => {
-    const message = `Pay ₹${formData.amount} to ${formData.payeeName}\nUPI ID: ${formData.paymentAddress}\n${formData.description ? `Note: ${formData.description}\n` : ''}`;
+    // Create UPI payment link based on payment type
+    let upiUrl;
+    if (formData.paymentAddressType === 'UPI') {
+      upiUrl = `upi://pay?pa=${formData.paymentAddress}&pn=${encodeURIComponent(formData.payeeName)}&am=${formData.amount}&tn=${encodeURIComponent(formData.description || '')}`;
+    } else {
+      upiUrl = `upi://pay?pa=${formData.paymentAddress}@upi&pn=${encodeURIComponent(formData.payeeName)}&am=${formData.amount}&tn=${encodeURIComponent(formData.description || '')}`;
+    }
+
+    const message = `Pay ₹${formData.amount} to ${formData.payeeName}\nUPI ID: ${formData.paymentAddress}\n${formData.description ? `Note: ${formData.description}\n` : ''}\nPayment Link: ${upiUrl}\n\nScan the QR code or click the payment link to pay`;
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
   };
