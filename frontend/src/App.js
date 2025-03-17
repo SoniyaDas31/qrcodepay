@@ -22,7 +22,7 @@ function App() {
     setIsLoading(true); // Start loading
     try {
       const API_URL = process.env.NODE_ENV === 'production' 
-        ? 'https://qrcodepay.onrender.com/api/generate-qr'
+        ? 'https://qrcodepay-backend.onrender.com/api/generate-qr'  // Updated production URL
         : 'http://localhost:5000/api/generate-qr';
       
       const response = await fetch(API_URL, {
@@ -78,27 +78,8 @@ function App() {
     localStorage.setItem('paymentInfo', JSON.stringify(dataToSave));
   };
 
-  const handleShare = () => {
-    // Create UPI payment link based on payment type
-    let upiUrl;
-    if (formData.paymentAddressType === 'UPI') {
-      upiUrl = `upi://pay?pa=${formData.paymentAddress}&pn=${encodeURIComponent(formData.payeeName)}&am=${formData.amount}&tn=${encodeURIComponent(formData.description || '')}`;
-    } else {
-      upiUrl = `upi://pay?pa=${formData.paymentAddress}@upi&pn=${encodeURIComponent(formData.payeeName)}&am=${formData.amount}&tn=${encodeURIComponent(formData.description || '')}`;
-    }
-
-    // Create a shareable message with HTML-like formatting that WhatsApp supports
-    const message = `*Pay ₹${formData.amount} to ${formData.payeeName}*\n` +
-      `UPI ID: ${formData.paymentAddress}\n` +
-      `${formData.description ? `Note: ${formData.description}\n` : ''}` +
-      `\nClick to pay: ${upiUrl}\n\n` +
-      `View QR Code: ${window.location.origin}${window.location.pathname}`;
-
-    // Open WhatsApp with the formatted message
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
-    window.open(whatsappUrl, '_blank');
-  };
-
+  // Remove handleShare function since it's not being used
+  
   const handleDownload = () => {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
@@ -245,18 +226,17 @@ function App() {
                 <img src={qrCode} alt="UPI QR Code" />
                 <p className="upi-id">{formData.paymentAddress}</p>
                 <p className="scan-text">Scan using any UPI payment apps</p>
-                
-                  <div className="modal-buttons">
-                    <button className="download-button" onClick={handleDownload}>
-                      <svg className="download-icon" viewBox="0 0 24 24">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 17 10"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                      </svg>
-                      Download QR
-                    </button>
-                    <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
-                  </div>
+                <div className="modal-buttons">
+                  <button className="download-button" onClick={handleDownload}>
+                    <svg className="download-icon" viewBox="0 0 24 24">
+                      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                      <polyline points="7 10 12 15 17 10"/>
+                      <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Download QR
+                  </button>
+                  <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
+                </div>
               </div>
             </div>
           </>
