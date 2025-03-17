@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import qrIcon from './assets/qr-icon.png';
+// Remove unused import
+// import qrIcon from './assets/qr-icon.png';
 
 function App() {
   const [formData, setFormData] = useState({
@@ -96,6 +97,53 @@ function App() {
     // Open WhatsApp with the formatted message
     const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
     window.open(whatsappUrl, '_blank');
+  };
+
+  const handleDownload = () => {
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+    const qrImage = new Image();
+    const padding = 40; // Add padding value
+
+    qrImage.onload = () => {
+      // Set canvas size with padding on all sides
+      canvas.width = qrImage.width + (padding * 2);
+      canvas.height = qrImage.height + (padding * 2) + 100;
+
+      // Draw white background
+      ctx.fillStyle = 'white';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw QR code with padding
+      ctx.drawImage(qrImage, padding, padding);
+
+      // Set text properties
+      ctx.fillStyle = 'black';
+      ctx.font = '16px Arial';
+      ctx.textAlign = 'center';
+
+      // Draw payment information with adjusted positioning
+      const paymentInfo = [
+        `Pay to: ${formData.payeeName}`,
+        `Amount: ₹${formData.amount || 'Not specified'}`,
+        `${formData.paymentAddressType}: ${formData.paymentAddress}`
+      ];
+
+      paymentInfo.forEach((text, index) => {
+        ctx.fillText(text, canvas.width / 2, qrImage.height + padding + 30 + (index * 20));
+      });
+
+      // Convert canvas to image and download
+      const dataUrl = canvas.toDataURL('image/png');
+      const link = document.createElement('a');
+      link.href = dataUrl;
+      link.download = `QR-${formData.payeeName}-${formData.amount || 'any'}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    };
+
+    qrImage.src = qrCode;
   };
 
   return (
@@ -197,18 +245,18 @@ function App() {
                 <img src={qrCode} alt="UPI QR Code" />
                 <p className="upi-id">{formData.paymentAddress}</p>
                 <p className="scan-text">Scan using any UPI payment apps</p>
-                <div className="modal-buttons">
-                  {/* Temporarily hiding WhatsApp share button
-                  <button className="share-button" onClick={handleShare}>
-                    <svg className="share-icon" viewBox="0 0 24 24">
-                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
-                      <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm6.958 17.887c-.11.18-.275.316-.473.41-.824.396-2.008.597-3.093.597-1.629 0-3.127-.406-4.454-1.159-1.557-.884-2.822-2.15-3.704-3.707-.882-1.563-1.317-3.074-1.317-4.527 0-1.085.201-2.269.597-3.093.094-.198.23-.364.41-.473.18-.11.379-.168.584-.168h1.337c.466 0 .88.32 1.001.784l.529 1.972c.079.295.02.61-.158.855l-.849 1.119c-.124.164-.142.393-.046.582.603 1.182 1.465 2.045 2.647 2.647.189.096.418.078.582-.046l1.119-.849c.245-.178.56-.237.855-.158l1.972.529c.464.121.784.535.784 1.001v1.337c0 .205-.058.404-.168.584z"/>
-                    </svg>
-                    Share on WhatsApp
-                  </button>
-                  */}
-                  <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
-                </div>
+                
+                  <div className="modal-buttons">
+                    <button className="download-button" onClick={handleDownload}>
+                      <svg className="download-icon" viewBox="0 0 24 24">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                      </svg>
+                      Download QR
+                    </button>
+                    <button className="close-button" onClick={() => setShowModal(false)}>Close</button>
+                  </div>
               </div>
             </div>
           </>
