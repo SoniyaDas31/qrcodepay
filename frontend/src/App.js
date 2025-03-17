@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-// Remove unused import
-// import qrIcon from './assets/qr-icon.png';
 
 function App() {
   const [formData, setFormData] = useState({
