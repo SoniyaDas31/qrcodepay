@@ -17,19 +17,24 @@ function App() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
-    setIsLoading(true); // Start loading
+    setIsLoading(true);
     try {
       const API_URL = process.env.NODE_ENV === 'production' 
-        ? 'https://qrcodepay-backend.onrender.com/api/generate-qr'  // Updated production URL
+        ? 'https://qrcodepay.onrender.com/api/generate-qr'
         : 'http://localhost:5000/api/generate-qr';
       
       const response = await fetch(API_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Accept': 'application/json'
         },
         body: JSON.stringify(formData),
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
       
       const data = await response.json();
       if (data.error) {
@@ -39,10 +44,10 @@ function App() {
       setQrCode(data.qrCode);
       setShowModal(true);
     } catch (error) {
-      setError('Failed to generate QR code');
+      setError(`Failed to generate QR code: ${error.message}`);
       console.error('Error:', error);
     } finally {
-      setIsLoading(false); // Stop loading
+      setIsLoading(false);
     }
   };
 
